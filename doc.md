@@ -413,6 +413,12 @@ To read objects you need to create an instance of ApatiteQuery. You can create a
 var query = session.newQuery(Department)
 ```
 
+You could also create a query from simple array.
+
+```js
+const query = session.newQueryFromArray(Department, [['name', '=', 'Sales']])
+```
+
 ### <a name="readiexecu"></a> 8.2 Executing Query
 
 To execute the query, call the method execute on the query. The method takes one argument which is a callback function. If the callback argument of the execute method is not provided, an instance of promise is returned. The callback function is called with two arguments. The first an error object in case of error or null. The second an array containing the objects. In case of promise, array containing the objects is passed to the resolve function and error is passed to the reject function.
@@ -460,38 +466,50 @@ query.orderBy('oid');
 //More comparision operators can be queried as
 
 query.attr('name').like('%st')
+//or query = session.newQueryFromArray(User, [['name', '~', '%st']])
 
 query.attr('name').notLike('%st')
+//or query = session.newQueryFromArray(User, [['name', '!~', '%st']])
 
 query.attr('oid').gt(6) // or query.attr('oid').greaterThan(6) 
+//or query = session.newQueryFromArray(User, [['oid', '>', 6]])
 
 query.attr('oid').ge(6) // or query.attr('oid').greaterOrEquals(6) 
+//or query = session.newQueryFromArray(User, [['oid', '>=', 6]])
 
-query.attr('oid').lt(6) // or query.attr('oid').lessThan(6) 
+query.attr('oid').lt(6) // or query.attr('oid').lessThan(6)
+//or query = session.newQueryFromArray(User, [['oid', '<', 6]])
 
 query.attr('oid').le(6) // or query.attr('oid').lessOrEquals(6) 
+//or query = session.newQueryFromArray(User, [['oid', '<=', 6]])
 
 query.attr('name').isNULL()
+//or query = session.newQueryFromArray(User, [['oid', '=', null]])
 
 query.attr('name').isNOTNULL()
+//or query = session.newQueryFromArray(User, [['oid', '!=', null]])
 
 query = session.newQuery(User);
 query.attr('name').eq('test').and.attr('id').eq('tom');
+//or query = session.newQueryFromArray(User, [['name', '=', 'test], '&', ['id', '=', 'tom']])
 
 //The above query form the following sql:
 //SELECT T1.OID, T1.ID, T1.NAME FROM USERS T1 WHERE T1.NAME = ? AND T1.ID = ?
 
 query = session.newQuery(User);
 query.attr('name').eq('test').or.attr('id').eq('tom');
+//or query = session.newQueryFromArray(User, [['name', '=', 'test], '|', ['id', '=', 'tom']])
+
 //The above query form the following sql:
 //SELECT T1.OID, T1.ID, T1.NAME FROM USERS T1 WHERE T1.NAME = ? OR T1.ID = ?
 
 query = session.newQuery(User);
 query.enclose.attr('name').eq('tom').or.attr('name').eq('jerry');
 query.and.enclose.attr('id').eq('x').or.attr('id').eq('y');
+// query = session.newQueryFromArray(User, ['(', ['name', '=', 'tom'], '|', ['name', '=', 'jerry'], ')', '&', '(', ['id', '=', 'x'], '|', ['id', '=', 'y'], ')'])
+
 //The above query form the following sql:
 //SELECT T1.OID, T1.ID, T1.NAME FROM USERS T1 WHERE ( T1.NAME = ? OR T1.NAME = ? ) AND ( T1.ID = ? OR T1.ID = ? )
-
 ```
 
 ### <a name="readionetoone"></a> 8.4 One To One Query Examples
