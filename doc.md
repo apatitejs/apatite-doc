@@ -920,6 +920,12 @@ function onCreated(err, result) {
 session.createDBTablesForAllModels(onCreated)
 session.createDBTableForModel('Department', onCreated)
 session.createDBColumnForAttribute('Department', 'name', onCreated)
+
+//Check for table/column existence, onChecked: a callback function which would be called
+//after the check. The function would be called with two arguments, the first an error object or null,
+//the second an object containing the rows (Array) with table/column infos if the table/column exists, else an empty array.
+session.existsDBTable(tableName, onChecked)
+session.existsDBTableColumn(tableName, columnName, onChecked)
 ...
 ```
 
@@ -929,7 +935,7 @@ Click [here](https://github.com/apatitejs/public-api/blob/master/public-api.md) 
 
 ## <a name="tests"></a> 17. Tests
 
-To run the tests, install [mocha](https://github.com/mochajs/mocha), [chai](https://github.com/chaijs/chai) and then run:
+To run the tests:
 
 ```bash
 $ npm test
